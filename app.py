@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from rag.retriever import answer_question, get_vector_store
+from rag.retriever import answer_question
 
 st.set_page_config(page_title="Monal Peshawar", page_icon="🍽️")
 
@@ -98,11 +98,6 @@ st.markdown('<div class="suggestion-title">Suggested questions</div>', unsafe_al
 for index, suggestion in enumerate(suggestions):
     if st.button(f"• {suggestion}", key=f"suggestion_{index}", use_container_width=True):
         st.session_state["chat_input"] = suggestion
-
-try:
-    get_vector_store()
-except FileNotFoundError:
-    pass
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
