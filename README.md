@@ -1,6 +1,6 @@
-# Monal RAG Prototype
+# Monal RAG API
 
-A portfolio-ready restaurant AI concierge for Monal Peshawar. It uses a PDF knowledge base, HuggingFace embeddings, ChromaDB vector search, MMR retrieval, and a Groq chat model to produce grounded answers with retrieved evidence.
+A restaurant AI concierge API for Monal Peshawar. It uses a PDF knowledge base, HuggingFace embeddings, ChromaDB vector search, MMR retrieval, and a Groq chat model to produce grounded answers.
 
 ## Setup
 
@@ -15,7 +15,19 @@ Add your `GROQ_API_KEY` to `.env`, then build the local vector database:
 
 ```powershell
 python -m rag ingest
-streamlit run app.py
+uvicorn api:app --reload
+```
+
+The API is available at `http://127.0.0.1:8000`. Send questions to `/chat`:
+
+```powershell
+Invoke-RestMethod -Uri http://127.0.0.1:8000/chat -Method Post -ContentType "application/json" -Body '{"question":"What is included in the buffet?"}'
+```
+
+Railway uses the following start command:
+
+```text
+uvicorn api:app --host 0.0.0.0 --port $PORT
 ```
 
 ## Refresh from the Monal website
@@ -28,16 +40,6 @@ python -m rag ingest
 ```
 
 The crawler renders the JavaScript-driven site in headless Chromium, follows same-domain HTML pages, extracts visible content and contact links, records page hashes in `data/website_snapshot.json`, and appends the live website information to `data/The_Monal_Restaurant_Knowledge_Base_Updated.pdf`. It reports added, changed, and removed pages. After installing requirements, install the browser once with `python -m playwright install chromium`. Review the generated PDF before using it as a production source.
-
-## Terminal chat
-
-After the vector database has been created, you can use the RAG assistant directly in a terminal:
-
-```powershell
-python -m rag chat
-```
-
-Type a question at `You:` and enter `exit` or `quit` to stop. Use the same virtual environment and `.env` file as the Streamlit app.
 
 The PDF is a prototype knowledge source. Confirm current prices, timings, availability, and contact details with Monal before using this in production.
 

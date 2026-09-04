@@ -84,7 +84,7 @@ def build_vector_store() -> Chroma:
 def get_vector_store() -> Chroma:
     if not CHROMA_DIR.exists() or not any(CHROMA_DIR.iterdir()):
         raise FileNotFoundError(
-            "Vector database not found. Run `python scripts/ingest.py` first."
+            "Vector database not found. Run `python -m rag ingest` first."
         )
     return Chroma(
         persist_directory=str(CHROMA_DIR),
