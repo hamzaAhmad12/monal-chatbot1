@@ -16,6 +16,15 @@ class ChatResponse(BaseModel):
     answer: str
 
 
+@app.get("/")
+def root() -> dict[str, str]:
+    return {
+        "status": "ok",
+        "message": "Monal Peshawar chatbot API is running.",
+        "docs": "/docs",
+    }
+
+
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
