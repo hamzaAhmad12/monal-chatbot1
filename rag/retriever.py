@@ -105,7 +105,9 @@ def get_chat_model(api_key: str) -> ChatGroq:
 def answer_question(question: str) -> tuple[str, list[Document]]:
     api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
-        raise RuntimeError("GROQ_API_KEY is missing. Add it to your .env file.")
+        raise RuntimeError(
+            "GROQ_API_KEY is missing. Add it to the Railway service Variables."
+        )
 
     vector_store = get_vector_store()
     retriever = vector_store.as_retriever(
