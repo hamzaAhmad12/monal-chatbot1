@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import os
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-from rag.retriever import answer_question
+from rag.retriever import CHROMA_DIR, answer_question
 
 app = FastAPI(title="Monal Peshawar Chatbot", version="1.0.0")
 
@@ -26,8 +28,13 @@ def root() -> dict[str, str]:
 
 
 @app.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "ok"}
+def health() -> dict[str, object]:
+    vector_store_ready = CHROMA_DIR.exists() and any(CHROMA_DIR.iterdir())
+    return {
+        "status": "ok",
+        "groq_api_key_configured": bool(os.getenv("GROQ_API_KEY")),
+        "vector_store_ready": vector_store_ready,
+    }
 
 
 @app.post("/chat", response_model=ChatResponse)
