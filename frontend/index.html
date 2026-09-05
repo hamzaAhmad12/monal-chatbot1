@@ -301,9 +301,6 @@
       send.disabled = true;
       send.textContent = '...';
       try {
-        if (!apiBaseUrl) {
-          throw new Error('No chatbot API is configured for this frontend. Set window.MONAL_API_URL to a deployed backend URL.');
-        }
         const response = await fetch(`${apiBaseUrl}/chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
