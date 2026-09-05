@@ -1,4 +1,5 @@
 {
+  "outputDirectory": ".",
   "rewrites": [
     {
       "source": "/chat",
@@ -7,6 +8,10 @@
     {
       "source": "/health",
       "destination": "https://web-production-e8c0d.up.railway.app/health"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
