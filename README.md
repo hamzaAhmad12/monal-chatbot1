@@ -14,19 +14,31 @@ Copy-Item .env.example .env
 Add your `GROQ_API_KEY` to `.env`, then build the local vector database:
 
 ```powershell
+python -m rag ingest
+```
+
+## Run the frontend
+
+The frontend is a plain HTML page served by FastAPI. It does not need a separate frontend server, build step, or npm installation.
+
+Start the backend from the project root:
+
+```powershell
 python -m uvicorn api:app --reload
 ```
 
-The browser chatbot is available at `http://127.0.0.1:8000`. The API documentation is at `/docs`, and clients can send questions directly to `/chat`:
+Open the chatbot in your browser:
+
+```text
+http://127.0.0.1:8000/
+```
+
+The interface includes the animated matrix background, suggested questions, and a chat composer connected to the `/chat` endpoint. The API documentation is available at `/docs`.
+
+To call the API directly:
 
 ```powershell
 Invoke-RestMethod -Uri http://127.0.0.1:8000/chat -Method Post -ContentType "application/json" -Body '{"question":"What is included in the buffet?"}'
-```
-
-Railway uses the following start command:
-
-```text
-uvicorn api:app --host 0.0.0.0 --port $PORT
 ```
 
 ## Refresh from the Monal website
