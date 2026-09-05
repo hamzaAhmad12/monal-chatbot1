@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 from rag.retriever import CHROMA_DIR, answer_question
 
 app = FastAPI(title="Monal Peshawar Chatbot", version="1.0.0")
+FRONTEND_PATH = Path(__file__).resolve().parent / "frontend" / "index.html"
 
 
 class ChatRequest(BaseModel):
@@ -19,12 +22,8 @@ class ChatResponse(BaseModel):
 
 
 @app.get("/")
-def root() -> dict[str, str]:
-    return {
-        "status": "ok",
-        "message": "Monal Peshawar chatbot API is running.",
-        "docs": "/docs",
-    }
+def root() -> FileResponse:
+    return FileResponse(FRONTEND_PATH, media_type="text/html")
 
 
 @app.get("/health")

@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#061522">
+  <title>Monal Peshawar | Concierge</title>
+  <style>
+    :root {
+      --ink: #eaf7ff;
+      --muted: #8caabd;
+      --cyan: #55e7ff;
+      --blue: #2477ff;
+      --line: rgba(93, 201, 255, .2);
+      --panel: rgba(5, 19, 34, .78);
+      --panel-strong: rgba(7, 29, 49, .9);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background: #030b13;
+      font: 15px/1.55 "Trebuchet MS", "Segoe UI", sans-serif;
+    }
+
+    #matrix {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      width: 100%;
+      height: 100%;
+      opacity: .32;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(0, 196, 255, .16), transparent 40%),
+        linear-gradient(135deg, rgba(2, 11, 20, .88), rgba(3, 26, 47, .82));
+    }
+
+    .shell {
+      width: min(100% - 32px, 940px);
+      min-height: 100vh;
+      margin: auto;
+      padding: 32px 0 28px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 22px;
+    }
+
+    .topbar, .chat-panel, .composer {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: 0 22px 70px rgba(0, 0, 0, .3), inset 0 1px rgba(255, 255, 255, .07);
+      backdrop-filter: blur(16px);
+    }
+
+    .topbar {
+      padding: 24px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      animation: rise .65s ease both;
+    }
+
+    .eyebrow {
+      margin: 0 0 5px;
+      color: var(--cyan);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: white;
+      font-size: clamp(1.8rem, 5vw, 3.5rem);
+      line-height: 1;
+      letter-spacing: .01em;
+      text-shadow: 0 0 24px rgba(85, 231, 255, .45);
+    }
+
+    .subtitle { margin: 10px 0 0; color: var(--muted); }
+    .signal {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #a9f7d3;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .signal::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #5cffab;
+      box-shadow: 0 0 14px #5cffab;
+      animation: pulse 1.7s ease-in-out infinite;
+    }
+
+    .chat-panel {
+      min-height: 420px;
+      padding: 28px;
+      animation: rise .75s .08s ease both;
+    }
+
+    .welcome { max-width: 650px; }
+    .welcome h2 { margin: 0 0 8px; font-size: 1.2rem; }
+    .welcome p { margin: 0; color: var(--muted); }
+
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 24px;
+    }
+    .suggestion {
+      border: 1px solid rgba(85, 231, 255, .25);
+      border-radius: 999px;
+      padding: 9px 14px;
+      color: #bcecff;
+      background: rgba(21, 76, 111, .28);
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    .suggestion:hover, .suggestion:focus-visible {
+      border-color: var(--cyan);
+      color: white;
+      background: rgba(25, 119, 178, .44);
+      box-shadow: 0 0 18px rgba(85, 231, 255, .18);
+      outline: none;
+    }
+
+    #messages { display: grid; gap: 14px; margin-top: 28px; }
+    .message {
+      max-width: 78%;
+      padding: 13px 16px;
+      border: 1px solid var(--line);
+      white-space: pre-wrap;
+      animation: message-in .3s ease both;
+    }
+    .message.user {
+      justify-self: end;
+      color: white;
+      background: linear-gradient(135deg, rgba(35, 112, 255, .7), rgba(12, 67, 130, .76));
+      border-radius: 14px 14px 3px 14px;
+    }
+    .message.assistant {
+      justify-self: start;
+      background: var(--panel-strong);
+      border-radius: 14px 14px 14px 3px;
+    }
+    .message.error { color: #ffc0c0; border-color: rgba(255, 105, 105, .4); }
+
+    .composer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      animation: rise .85s .16s ease both;
+    }
+    #question {
+      flex: 1;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      padding: 11px 14px;
+      color: white;
+      background: transparent;
+      font: inherit;
+    }
+    #question::placeholder { color: #7694a6; }
+    #send {
+      border: 0;
+      border-radius: 8px;
+      padding: 11px 17px;
+      color: #021522;
+      background: var(--cyan);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    #send:hover:not(:disabled), #send:focus-visible:not(:disabled) {
+      background: white;
+      box-shadow: 0 0 20px rgba(85, 231, 255, .55);
+      outline: none;
+    }
+    #send:disabled { cursor: wait; opacity: .55; }
+
+    @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    @keyframes message-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    @keyframes pulse { 50% { opacity: .4; transform: scale(.75); } }
+
+    @media (max-width: 600px) {
+      .shell { width: min(100% - 18px, 940px); padding-top: 10px; gap: 12px; }
+      .topbar, .chat-panel { padding: 20px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .chat-panel { min-height: calc(100vh - 220px); }
+      .message { max-width: 92%; }
+      .composer { position: sticky; bottom: 10px; }
+      #send { padding-inline: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix" aria-hidden="true"></canvas>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Monal Peshawar / Concierge Link</p>
+        <h1>Ask Monal.</h1>
+        <p class="subtitle">A direct line to the restaurant's menu, buffet, and branch details.</p>
+      </div>
+      <div class="signal">Knowledge link online</div>
+    </header>
+
+    <section class="chat-panel" aria-live="polite">
+      <div class="welcome">
+        <h2>What can I help you discover?</h2>
+        <p>Ask a question and I will search Monal's restaurant information for a grounded answer.</p>
+      </div>
+      <div class="suggestions" aria-label="Suggested questions">
+        <button class="suggestion" type="button">What is included in the buffet?</button>
+        <button class="suggestion" type="button">What is the address of Monal Peshawar?</button>
+        <button class="suggestion" type="button">Show me vegetarian options.</button>
+      </div>
+      <div id="messages"></div>
+    </section>
+
+    <form class="composer" id="chat-form">
+      <input id="question" name="question" type="text" maxlength="1000" autocomplete="off" placeholder="Ask about Monal Peshawar..." required>
+      <button id="send" type="submit">Send</button>
+    </form>
+  </main>
+
+  <script>
+    const canvas = document.getElementById('matrix');
+    const context = canvas.getContext('2d');
+    const glyphs = '01MONAL<>[]{}';
+    let columns = 0;
+    let drops = [];
+
+    function resizeMatrix() {
+      const scale = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * scale;
+      canvas.height = window.innerHeight * scale;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      context.setTransform(scale, 0, 0, scale, 0, 0);
+      columns = Math.ceil(window.innerWidth / 18);
+      drops = Array.from({ length: columns }, () => Math.random() * -40);
+    }
+
+    function drawMatrix() {
+      context.fillStyle = 'rgba(3, 11, 19, .12)';
+      context.fillRect(0, 0, window.innerWidth, window.innerHeight);
+      context.font = '12px monospace';
+      for (let index = 0; index < drops.length; index += 1) {
+        const character = glyphs[Math.floor(Math.random() * glyphs.length)];
+        context.fillStyle = index % 9 === 0 ? 'rgba(85, 231, 255, .72)' : 'rgba(24, 139, 194, .38)';
+        context.fillText(character, index * 18, drops[index] * 18);
+        if (drops[index] * 18 > window.innerHeight && Math.random() > .975) drops[index] = 0;
+        drops[index] += .45;
+      }
+      requestAnimationFrame(drawMatrix);
+    }
+    resizeMatrix();
+    window.addEventListener('resize', resizeMatrix);
+    drawMatrix();
+
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('question');
+    const send = document.getElementById('send');
+    const messages = document.getElementById('messages');
+
+    function addMessage(text, role, extraClass = '') {
+      const message = document.createElement('div');
+      message.className = `message ${role} ${extraClass}`;
+      message.textContent = text;
+      messages.appendChild(message);
+      message.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    async function ask(question) {
+      const cleanQuestion = question.trim();
+      if (!cleanQuestion || send.disabled) return;
+      addMessage(cleanQuestion, 'user');
+      input.value = '';
+      send.disabled = true;
+      send.textContent = '...';
+      try {
+        const response = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question: cleanQuestion })
+        });
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.detail || 'The chatbot could not answer right now.');
+        addMessage(payload.answer, 'assistant');
+      } catch (error) {
+        addMessage(error.message, 'assistant', 'error');
+      } finally {
+        send.disabled = false;
+        send.textContent = 'Send';
+        input.focus();
+      }
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      ask(input.value);
+    });
+    document.querySelectorAll('.suggestion').forEach((button) => {
+      button.addEventListener('click', () => ask(button.textContent));
+    });
+  </script>
+</body>
+</html>

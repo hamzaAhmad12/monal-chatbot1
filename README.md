@@ -17,7 +17,7 @@ Add your `GROQ_API_KEY` to `.env`, then build the local vector database:
 python -m uvicorn api:app --reload
 ```
 
-The API is available at `http://127.0.0.1:8000`. Send questions to `/chat`:
+The browser chatbot is available at `http://127.0.0.1:8000`. The API documentation is at `/docs`, and clients can send questions directly to `/chat`:
 
 ```powershell
 Invoke-RestMethod -Uri http://127.0.0.1:8000/chat -Method Post -ContentType "application/json" -Body '{"question":"What is included in the buffet?"}'
