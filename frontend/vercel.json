@@ -7,14 +7,6 @@
     {
       "source": "/health",
       "destination": "https://web-production-e8c0d.up.railway.app/health"
-    },
-    {
-      "source": "/",
-      "destination": "/frontend/index.html"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/frontend/$1"
     }
   ]
 }
