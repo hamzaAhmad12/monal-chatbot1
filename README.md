@@ -35,6 +35,12 @@ http://127.0.0.1:8000/
 
 The interface includes the animated matrix background, suggested questions, and a chat composer connected to the `/chat` endpoint. The API documentation is available at `/docs`.
 
+### GitHub Pages
+
+GitHub Pages is static hosting, so it can display the frontend but cannot run the FastAPI chatbot backend. In the repository settings, open **Pages**, choose **Deploy from a branch**, select the `frontend` branch and the `/ (root)` folder, then save. The root `index.html` opens the matrix interface from `frontend/index.html`.
+
+For the chat requests to work on GitHub Pages, the frontend must call the deployed Railway API and that API must allow the GitHub Pages origin through CORS. Opening the Railway URL directly serves both the UI and API without this cross-origin setup.
+
 To call the API directly:
 
 ```powershell
