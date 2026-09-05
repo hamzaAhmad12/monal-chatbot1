@@ -37,7 +37,7 @@ The interface includes the animated matrix background, suggested questions, and 
 
 ### Deploy the frontend on Vercel
 
-Import the `frontend` branch into Vercel. This is a plain static HTML/CSS/JavaScript frontend, not a Vite, React, or Next.js project. No build command, package installation, or environment variable is required. Set the project Root Directory to `frontend`; its `vercel.json` proxies `/chat` and `/health` to the Railway API.
+Import the `frontend` branch into Vercel. This is a plain static HTML/CSS/JavaScript frontend, not a Vite, React, or Next.js project. No build command, package installation, or environment variable is required. Set the project Root Directory to `frontend`.
 
 Use these Vercel settings:
 
@@ -55,9 +55,9 @@ If deploying with the Vercel CLI, run it from the frontend directory or pass the
 vercel --cwd frontend --prod
 ```
 
-Do not run `vercel --prod` from the repository root, because that directory contains the Railway FastAPI backend and Vercel may detect `api.py`.
+Run the Vercel command from the `frontend` directory so Vercel only sees the static frontend files.
 
-After deployment, open the Vercel project URL. The chatbot uses the Railway service configured in `vercel.json` for its answers.
+After deployment, open the Vercel project URL. To connect it to a separately hosted backend, define `window.MONAL_API_URL` before the frontend script runs, or replace the empty API base in `frontend/index.html` with that backend URL.
 
 To call the API directly:
 
