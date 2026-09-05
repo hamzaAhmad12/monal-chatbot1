@@ -305,7 +305,13 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ question: cleanQuestion })
         });
-        const payload = await response.json();
+        const responseText = await response.text();
+        let payload;
+        try {
+          payload = JSON.parse(responseText);
+        } catch {
+          throw new Error(`The chatbot service returned an unexpected response (${response.status}).`);
+        }
         if (!response.ok) throw new Error(payload.detail || 'The chatbot could not answer right now.');
         addMessage(payload.answer, 'assistant');
       } catch (error) {
