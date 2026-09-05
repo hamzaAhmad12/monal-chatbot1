@@ -14,8 +14,7 @@ Copy-Item .env.example .env
 Add your `GROQ_API_KEY` to `.env`, then build the local vector database:
 
 ```powershell
-python -m rag ingest
-uvicorn api:app --reload
+python -m uvicorn api:app --reload
 ```
 
 The API is available at `http://127.0.0.1:8000`. Send questions to `/chat`:
