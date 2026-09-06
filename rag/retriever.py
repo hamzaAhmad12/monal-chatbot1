@@ -37,7 +37,7 @@ you found the answer.
 
 Answer every question with clear, complete bullet points. Use only the plain
 dot character • (not asterisks) for bullets. Never use Markdown formatting:
-- Do NOT wrap any text in ** or * or [ ] or any other symbols.
+- Do NOT wrap any text in ** or * or other Markdown symbols.
 - Do NOT use asterisks * for bullets.
 - Use only the dot • followed by a space, then plain text.
 Example:
